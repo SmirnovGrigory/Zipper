@@ -1,29 +1,14 @@
 #ifndef ZIPPER_H
 #define ZIPPER_H
 
-#include<iostream>
+#include <iostream>
 #include <fstream>
 #include <vector>
 #include <map>
 #include <list>
 #include <string>
 
-class Node {
-private:
-	char symbol;
-	int count;
-	Node* left;
-	Node* right;
-public:
-	Node();
-	Node(Node* left, Node* right);
-	void setSymbol(char symbol);
-	void setCount(int count);
-	char getSymbol();
-	int getCount();
-	Node* getLeft();
-	Node* getRight();
-};
+#include "node.h"
 
 class HaffmanZipper {
 private:
@@ -39,7 +24,6 @@ private:
 	void compress(const std::string& output_file_name);
 	void buildTable(Node* root);
 public:
-	HaffmanZipper();
 	void zipping(const std::string& input_file_name,const std::string& output_file_name);
 	void unzipping(const std::string& input_file_name, const std::string& output_file_name);
 	void printVocabStatistics();

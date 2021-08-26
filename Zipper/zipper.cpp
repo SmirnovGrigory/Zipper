@@ -1,41 +1,5 @@
 #include "zipper.h"
 
-Node::Node() {
-	left = NULL;
-	right = NULL;
-}
-
-Node::Node(Node* left, Node* right) {
-	this->left = left;
-	this->right = right;
-	count = left->count + right->count;
-}
-
-void Node::setSymbol(char symbol) {
-	this->symbol = symbol;
-}
-
-void Node::setCount(int count) {
-	this->count = count;
-}
-
-char Node::getSymbol() {
-	return symbol;
-}
-
-int Node::getCount() {
-	return count;
-}
-
-Node* Node::getLeft() {
-	return left;
-}
-
-Node* Node::getRight() {
-	return right;
-}
-
-HaffmanZipper::HaffmanZipper() {}
 
 void HaffmanZipper::fillVocabStatistics() {
 	while (!input_stream.eof())
@@ -127,11 +91,11 @@ void HaffmanZipper::unzipping(const std::string& input_file_name, const std::str
 	//setlocale(LC_ALL, "Russian"); 
 
 	Node* p = main_root;
-	int count = 0; char byte;
+	int count8 = 0; char byte;
 	byte = zipped_file.get();
 	while (!zipped_file.eof())
 	{
-		bool b = byte & (1 << (7 - count));
+		bool b = byte & (1 << (7 - count8));
 		if (b)
 			p = p->getRight();
 		else
@@ -140,9 +104,9 @@ void HaffmanZipper::unzipping(const std::string& input_file_name, const std::str
 			unzipped_file << p->getSymbol();
 			p = main_root;
 		}
-		count++;
-		if (count == 8) {
-			count = 0;
+		count8++;
+		if (count8 == 8) {
+			count8 = 0;
 			byte = zipped_file.get();
 		}
 	}
