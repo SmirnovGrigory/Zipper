@@ -85,8 +85,30 @@ void HaffmanZipper::buildTable(Node* root) {
 }
 
 void HaffmanZipper::putCodesToOutFile(const std::string& output_file_name) {
-	std::ofstream g(output_file_name, std::ios::binary);
+	std::ofstream out_file(output_file_name, std::ios::binary);
 
+	input_stream.clear();
+	input_stream.seekg(0);
+
+	int count8 = 0; char compress_buf = 0;
+	while (!input_stream.eof()) {
+
+		char c = input_stream.get();
+		std::vector<bool> char_code = vocab_table[c];
+
+		for (int i = 0; i < char_code.size(); i++) {
+			compress_buf = compress_buf | char_code[i] << (7 - count8);
+			count8++;
+
+			if (count8 == 8) {
+				count8 = 0;
+				out_file << compress_buf;
+				compress_buf = 0;
+			}
+		}
+			
+	}
+	out_file.close();
 }
 
 void HaffmanZipper::zipping(const std::string& input_file_name, const std::string& output_file_name){
@@ -97,6 +119,7 @@ void HaffmanZipper::zipping(const std::string& input_file_name, const std::strin
 	createTree();
 	buildTable(main_root);
 	putCodesToOutFile(output_file_name);
+	input_stream.close();
 }
 
 void HaffmanZipper::printVocabStatistics() {
