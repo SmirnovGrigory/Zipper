@@ -84,7 +84,7 @@ void HaffmanZipper::buildTable(Node* root) {
 	}
 }
 
-void HaffmanZipper::putCodesToOutFile(const std::string& output_file_name) {
+void HaffmanZipper::compress(const std::string& output_file_name) {
 	std::ofstream out_file(output_file_name, std::ios::binary);
 
 	input_stream.clear();
@@ -105,8 +105,7 @@ void HaffmanZipper::putCodesToOutFile(const std::string& output_file_name) {
 				out_file << compress_buf;
 				compress_buf = 0;
 			}
-		}
-			
+		}	
 	}
 	out_file.close();
 }
@@ -115,11 +114,40 @@ void HaffmanZipper::zipping(const std::string& input_file_name, const std::strin
 	input_stream = std::ifstream(input_file_name, std::ios::binary);
 	//сделать проверку возможно файл не откроется
 	fillVocabStatistics();
-	printVocabStatistics();
+	//printVocabStatistics();
 	createTree();
 	buildTable(main_root);
-	putCodesToOutFile(output_file_name);
+	compress(output_file_name);
 	input_stream.close();
+}
+
+void HaffmanZipper::unzipping(const std::string& input_file_name, const std::string& output_file_name) {
+	std::ifstream zipped_file(input_file_name, std::ios::binary);
+	std::ofstream unzipped_file(output_file_name, std::ios::binary);
+	//setlocale(LC_ALL, "Russian"); 
+
+	Node* p = main_root;
+	int count = 0; char byte;
+	byte = zipped_file.get();
+	while (!zipped_file.eof())
+	{
+		bool b = byte & (1 << (7 - count));
+		if (b)
+			p = p->getRight();
+		else
+			p = p->getLeft();
+		if (p->getLeft() == NULL && p->getRight() == NULL) {
+			unzipped_file << p->getSymbol();
+			p = main_root;
+		}
+		count++;
+		if (count == 8) {
+			count = 0;
+			byte = zipped_file.get();
+		}
+	}
+	zipped_file.close();
+	unzipped_file.close();
 }
 
 void HaffmanZipper::printVocabStatistics() {

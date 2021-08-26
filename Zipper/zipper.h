@@ -36,11 +36,12 @@ private:
 
 	void fillVocabStatistics();
 	void createTree();
-	void putCodesToOutFile(const std::string& output_file_name);
+	void compress(const std::string& output_file_name);
 	void buildTable(Node* root);
 public:
 	HaffmanZipper();
 	void zipping(const std::string& input_file_name,const std::string& output_file_name);
+	void unzipping(const std::string& input_file_name, const std::string& output_file_name);
 	void printVocabStatistics();
 
 };
