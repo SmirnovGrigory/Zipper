@@ -30,8 +30,7 @@ public:
 
 };
 
-struct CompareNodesbyCount
-{
+struct CompareNodesbyCount {
 	bool operator()(Node* left, Node* right) const {
 		return left->getCount() < right->getCount(); 
 	}
