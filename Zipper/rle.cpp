@@ -6,6 +6,11 @@ void RleCompressor::printEncodedBytes() {
 	}
 }
 
+void RleCompressor::printOccurence() {
+	for (auto c : occurence)
+		std::cout << (int)c << " ";
+}
+
 void RleCompressor::compressing(const std::string& input_file_name,
     const std::string& output_file_name) {
 	std::ifstream input_stream(input_file_name, std::ios::binary);
@@ -14,12 +19,11 @@ void RleCompressor::compressing(const std::string& input_file_name,
 	}
 	std::ofstream out_file(output_file_name, std::ios::binary);
 
-	std::vector<char> current_pixel;
+	std::vector<unsigned char> current_pixel;
 	current_pixel.resize(3);
 	bool same = false;
 	bool first = true;
-	//char tech_info[256];
-	//input_stream.read(tech_info, 256);
+
 	while (!input_stream.eof()) {
 		for (int i = 0; i < 3; i++)
 			current_pixel[i] = input_stream.get();
@@ -65,11 +69,11 @@ void RleCompressor::decompressing(const std::string& input_file_name, const std:
 	}
 	std::ofstream out_file(output_file_name, std::ios::binary);
 
-	std::vector<char> current_pixel;
+	std::vector<unsigned char> current_pixel;
 	current_pixel.resize(3);
 
 	while (!input_stream.eof()) {
-		int len = (int)input_stream.get();
+		unsigned char len = (int)input_stream.get();
 
 		for (int i=0; i<3;i++)
 			current_pixel[i]= input_stream.get();

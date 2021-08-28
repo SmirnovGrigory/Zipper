@@ -36,7 +36,8 @@ int main(int argc, char* argv[]) {
 	}*/
 
 	RleCompressor rle;
-	rle.compressing("ppm/test1.ppm","lol.rle");
+	rle.compressing("ppm/test4.ppm","lol.rle");
+	rle.printOccurence();
 	rle.decompressing("lol.rle", "result.ppm");
 	return 0;
 }
