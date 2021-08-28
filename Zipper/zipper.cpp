@@ -76,6 +76,9 @@ void HaffmanZipper::compress(const std::string& output_file_name) {
 
 void HaffmanZipper::zipping(const std::string& input_file_name, const std::string& output_file_name){
 	input_stream = std::ifstream(input_file_name, std::ios::binary);
+	if (!input_stream.is_open()) {
+		throw std::invalid_argument("File Not Found."); 
+	}
 	//сделать проверку возможно файл не откроется
 	fillVocabStatistics();
 	//printVocabStatistics();
@@ -87,6 +90,9 @@ void HaffmanZipper::zipping(const std::string& input_file_name, const std::strin
 
 void HaffmanZipper::unzipping(const std::string& input_file_name, const std::string& output_file_name) {
 	std::ifstream zipped_file(input_file_name, std::ios::binary);
+	if (!zipped_file.is_open()) {
+		throw std::invalid_argument("File Not Found.");
+	}
 	std::ofstream unzipped_file(output_file_name, std::ios::binary);
 	//setlocale(LC_ALL, "Russian"); 
 

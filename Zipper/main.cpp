@@ -1,5 +1,6 @@
 #include "zipper.h"
 #include "parser.h"
+#include "rle.h"
 
 void test01Sonet106many() {
 	HaffmanZipper hfz;
@@ -13,26 +14,29 @@ void test02MyAbstractText() {
 	hfz.unzipping("mytext.bin", "unzippedtext.txt");
 }
 
-void test03BirdsPick() {
+void test03Picture() {
 	HaffmanZipper hfz;
-	hfz.zipping("pic1.jpg", "pic1.bin");
-	hfz.unzipping("pic1.bin", "pic1unzipped.jpg");
+	hfz.zipping("simple.png", "simple.bin");
+	hfz.unzipping("simple.bin", "unzippedsimple.png");
 	//сжатия данных не произошло
 }
 
 int main(int argc, char* argv[]) {
-	InputParser input(argc, argv);
+	/*InputParser input(argc, argv);
 	const std::string& input_filename = input.getCmdOption("-if");
 	const std::string& output_filename = input.getCmdOption("-of");
 
 	HaffmanZipper hfz;
 
 	if (input.cmdOptionExists("-un")) {
-		hfz.zipping(input_filename, output_filename);
-	}
-	else {
 		hfz.unzipping(input_filename, output_filename);
 	}
+	else {
+		hfz.zipping(input_filename, output_filename);
+	}*/
 
+	RleCompressor rle;
+	rle.compressing("ppm/test1.ppm","lol.rle");
+	rle.decompressing("lol.rle", "result.ppm");
 	return 0;
 }
