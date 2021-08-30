@@ -16,18 +16,19 @@ private:
 	std::vector<bool> current_code;
 	std::map<char, std::vector<bool>> vocab_table;
 	std::list<Node*> binary_tree;
-	std::ifstream input_stream;
+	std::ifstream input_file;
+	std::ofstream output_file;
 	Node* main_root;
 
 	void fillVocabStatistics();
 	void createTree();
-	void compress(const std::string& output_file_name);
+	void compress();
 	void buildTable(Node* root);
 public:
-	void zipping(const std::string& input_file_name,const std::string& output_file_name);
-	void unzipping(const std::string& input_file_name, const std::string& output_file_name);
+	HaffmanZipper(const std::string& input_file_name, const std::string& output_file_name);
+	void zipping();
+	void unzipping();
 	void printVocabStatistics();
-
 };
 
 struct CompareNodesbyCount {

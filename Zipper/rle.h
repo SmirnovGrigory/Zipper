@@ -8,13 +8,15 @@
 
 class RleCompressor {
 private:
-	std::vector<std::pair<char, int>> encoded_bytes;
 	std::vector<unsigned char> encoded_pixels;
 	std::vector<unsigned char> occurence;
+	std::ifstream input_file;
+	std::ofstream output_file;
 public:
-	void compressing(const std::string& input_file_name, const std::string& output_file_name);
-	void decompressing(const std::string& input_file_name, const std::string& output_file_name);
-	void printEncodedBytes();
+	RleCompressor(const std::string& input_file_name, const std::string& output_file_name);
+	void compressingPicture();
+	void decompressingPicture();
+	//void compressionBits
 	void printOccurence();
 };
 

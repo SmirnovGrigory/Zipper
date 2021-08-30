@@ -1,8 +1,13 @@
 #include "rle.h"
 
-void RleCompressor::printEncodedBytes() {
-	for (int i = 0; i < encoded_bytes.size(); i++) {
-		std::cout << encoded_bytes[i].first << " - " << encoded_bytes[i].second << std::endl;
+RleCompressor::RleCompressor(const std::string& input_file_name, const std::string& output_file_name) {
+	input_file = std::ifstream(input_file_name, std::ios::binary);
+	if (!input_file.is_open()) {
+		throw std::invalid_argument("File Not Found.");
+	}
+	output_file = std::ofstream(output_file_name, std::ios::binary);
+	if (!output_file.is_open()) {
+		throw std::invalid_argument("File Not Found.");
 	}
 }
 
@@ -11,22 +16,15 @@ void RleCompressor::printOccurence() {
 		std::cout << (int)c << " ";
 }
 
-void RleCompressor::compressing(const std::string& input_file_name,
-    const std::string& output_file_name) {
-	std::ifstream input_stream(input_file_name, std::ios::binary);
-	if (!input_stream.is_open()) {
-		throw std::invalid_argument("File Not Found.");
-	}
-	std::ofstream out_file(output_file_name, std::ios::binary);
-
+void RleCompressor::compressingPicture() {
 	std::vector<unsigned char> current_pixel;
 	current_pixel.resize(3);
 	bool same = false;
 	bool first = true;
 
-	while (!input_stream.eof()) {
+	while (!input_file.eof()) {
 		for (int i = 0; i < 3; i++)
-			current_pixel[i] = input_stream.get();
+			current_pixel[i] = input_file.get();
 		if (!first && current_pixel[0] == encoded_pixels[encoded_pixels.size() - 3]
 				   && current_pixel[1] == encoded_pixels[encoded_pixels.size() - 2]
 				   && current_pixel[2] == encoded_pixels[encoded_pixels.size() - 1]) {
@@ -54,35 +52,27 @@ void RleCompressor::compressing(const std::string& input_file_name,
 	}
 
 	for (int i = 0; i < occurence.size(); i++) {
-		out_file << occurence[i];
+		output_file << occurence[i];
 		for (int j = 0; j < 3; j++)
-			out_file << encoded_pixels[i*3 + j];
+			output_file << encoded_pixels[i*3 + j];
 	}
-	input_stream.close();
-	out_file.close();
+	input_file.close();
+	output_file.close();
 }
 
-void RleCompressor::decompressing(const std::string& input_file_name, const std::string& output_file_name) {
-	std::ifstream input_stream(input_file_name, std::ios::binary);
-	if (!input_stream.is_open()) {
-		throw std::invalid_argument("File Not Found.");
-	}
-	std::ofstream out_file(output_file_name, std::ios::binary);
+void RleCompressor::decompressingPicture() {
 
 	std::vector<unsigned char> current_pixel;
 	current_pixel.resize(3);
 
-	while (!input_stream.eof()) {
-		unsigned char len = (int)input_stream.get();
+	while (!input_file.eof()) {
+		unsigned char len = input_file.get();
 
 		for (int i=0; i<3;i++)
-			current_pixel[i]= input_stream.get();
+			current_pixel[i]= input_file.get();
 
 		for (int i = 0; i < len; i++)
 			for (int j = 0; j < 3; j++)
-				out_file<<current_pixel[j];
+				output_file<<current_pixel[j];
 	}
-
-	input_stream.close();
-	out_file.close();
 }
