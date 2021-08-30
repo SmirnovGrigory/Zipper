@@ -35,9 +35,10 @@ int main(int argc, char* argv[]) {
 		hfz.zipping(input_filename, output_filename);
 	}*/
 
-	RleCompressor rle;
+	/*RleCompressor rle;
 	rle.compressing("ppm/test4.ppm","lol.rle");
 	rle.printOccurence();
-	rle.decompressing("lol.rle", "result.ppm");
+	rle.decompressing("lol.rle", "result.ppm");*/
+	test02MyAbstractText();
 	return 0;
 }

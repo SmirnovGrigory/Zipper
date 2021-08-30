@@ -51,10 +51,26 @@ void HaffmanZipper::buildTable(Node* root) {
 void HaffmanZipper::compress(const std::string& output_file_name) {
 	std::ofstream out_file(output_file_name, std::ios::binary);
 
+	out_file << (unsigned char)vocab_table.size();
+
+	std::map<char, std::vector<bool>>::iterator it;
+	for (it = vocab_table.begin(); it != vocab_table.end(); it++) {
+		out_file << it->first;
+		out_file << (unsigned char)it->second.size();
+
+		std::vector<bool> char_code = it->second;
+
+		for (int i = 0; i <char_code.size(); i++) {
+			out_file << char_code[i];
+		}
+		
+	}
+
 	input_stream.clear();
 	input_stream.seekg(0);
 
-	int count8 = 0; char compress_buf = 0;
+	int count8 = 0;
+	char compress_buf = 0;
 	while (!input_stream.eof()) {
 
 		char c = input_stream.get();
@@ -88,28 +104,58 @@ void HaffmanZipper::zipping(const std::string& input_file_name, const std::strin
 	input_stream.close();
 }
 
+void printVocabTableFromZippedFile() {
+	/*unsigned char table_len = zipped_file.get();
+	for (int i = 0; i < table_len; i++) {
+		std::cout << (char)zipped_file.get() << " ";
+		unsigned char len = zipped_file.get();
+		for (int j = 0; j < len; j++) {
+			std::cout << (char)zipped_file.get();
+		}
+		std::cout << std::endl;
+	}*/
+}
+
 void HaffmanZipper::unzipping(const std::string& input_file_name, const std::string& output_file_name) {
 	std::ifstream zipped_file(input_file_name, std::ios::binary);
 	if (!zipped_file.is_open()) {
 		throw std::invalid_argument("File Not Found.");
 	}
 	std::ofstream unzipped_file(output_file_name, std::ios::binary);
-	//setlocale(LC_ALL, "Russian"); 
 
-	Node* p = main_root;
+
+	std::map<char, std::vector<bool>> unzipping_vocab_table;
+	unsigned char table_len = zipped_file.get();
+	for (int i = 0; i < table_len; i++) {
+		char c =(char)zipped_file.get();
+		unsigned char len = zipped_file.get();
+		std::vector<bool> char_code;
+		for (int j = 0; j < len; j++) {
+			 char_code.push_back((bool)(zipped_file.get() - '0'));
+		}
+		unzipping_vocab_table[c] = char_code;
+	}
+
 	int count8 = 0; char byte;
 	byte = zipped_file.get();
-	while (!zipped_file.eof())
-	{
-		bool b = byte & (1 << (7 - count8));
-		if (b)
-			p = p->getRight();
-		else
-			p = p->getLeft();
-		if (p->getLeft() == NULL && p->getRight() == NULL) {
-			unzipped_file << p->getSymbol();
-			p = main_root;
+	std::vector<bool> current_char_code;
+
+	while (!zipped_file.eof()) {
+		bool bit = byte & (1 << (7 - count8));
+		current_char_code.push_back(bit);
+		bool search_flag = false;
+		std::map<char, std::vector<bool>>::iterator it;
+		for (it = unzipping_vocab_table.begin(); it != unzipping_vocab_table.end(); it++) {
+			if (it->second == current_char_code) {
+				search_flag = true;
+				break;
+			}
 		}
+		if (search_flag) {
+			unzipped_file << it->first;
+			current_char_code.clear();
+		}
+
 		count8++;
 		if (count8 == 8) {
 			count8 = 0;
