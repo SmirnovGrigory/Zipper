@@ -99,7 +99,6 @@ void RleCompressor::compressingBits(bool utf8) {
 			break;
 		for (size_t i = 0; i < 8; i++) {
 			bool current_bool = current_byte & 1 << (7 - i);
-			//std::cout << current_bool;
 			if (!first && current_bool == encoded_bits[encoded_bits.size() - 1]) {
 				same = true;
 			}
@@ -122,7 +121,6 @@ void RleCompressor::compressingBits(bool utf8) {
 				occurence.push_back(1);
 			}
 		}
-		//std::cout << std::endl;
 	}
 
 	writeBitsToFile();

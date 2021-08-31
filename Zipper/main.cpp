@@ -70,11 +70,5 @@ int main(int argc, char* argv[]) {
 		std::cout << "you have not chosen a compression algorithm";
 	}
 
-	//RleCompressor rle("mytext.txt", "lol.bin"); /*("test/test.txt", "lol.bin")*/ /*("ppm\\test5.ppm", "lol.bin")*/
-	//rle.compressingBits(true);
-
-	//RleCompressor rle2("lol.bin", "unzipped.txt"); /*("lol.bin", "testun.txt")*/ /*("lol.bin", "unzipped.ppm")*/
-	//rle2.decompressingBits(true);
-
 	return 0;
 }
