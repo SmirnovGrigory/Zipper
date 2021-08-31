@@ -16,19 +16,6 @@ void RleCompressor::printOccurence() {
 		std::cout << (int)c << " ";
 }
 
-void RleCompressor::logInputFileBits() {
-	/*input_file.clear();
-	input_file.seekg(0);
-	std::ofstream log("log.log");
-	while (!input_file.eof()) {
-		char current_byte = input_file.get();
-		for (int i = 0; i < 8; i++) {
-			bool bit = current_byte & (1 << (7 - i));
-			log << bit;
-		}
-	}
-	log.close();*/
-}
 
 void RleCompressor::compressingPicture() {
 	std::vector<unsigned char> current_pixel;
@@ -91,13 +78,13 @@ void RleCompressor::decompressingPicture() {
 	}
 }
 
-void RleCompressor::compressingBits() {
+void RleCompressor::compressingBits(bool utf8) {
 	bool same = false;
 	bool first = true;
 
 	while (!input_file.eof()) {
 		char current_byte = input_file.get();
-		if (current_byte == EOF)
+		if (utf8 && current_byte == EOF)
 			break;
 		for (int i = 0; i < 8; i++) {
 			bool current_bool = current_byte & 1 << (7 - i);
@@ -147,16 +134,16 @@ void RleCompressor::compressingBits() {
 	output_file.close();
 }
 
-void RleCompressor::decompressingBits() {
+void RleCompressor::decompressingBits(bool utf8) {
 
 	unsigned char buf = 0;
 	int count8 = 0;
 	char current_char;
-	while (EOF != (current_char = input_file.get())) {
+	while (!input_file.eof()) {
+		current_char = input_file.get();
 		//unsigned char current_char = input_file.get();
-		//не умеем обрабатывать 255
-		//if (current_char == 255)
-		//	break;
+		if (utf8 && current_char == EOF)
+			break;
 		bool current_bit = current_char & (1 << 7);
 		current_char = current_char & 127;
 

@@ -17,10 +17,9 @@ public:
 	RleCompressor(const std::string& input_file_name, const std::string& output_file_name);
 	void compressingPicture();
 	void decompressingPicture();
-	void compressingBits();
-	void decompressingBits();
+	void compressingBits(bool utf8=false);
+	void decompressingBits(bool utf8 = false);
 	void printOccurence();
-	void logInputFileBits();
 };
 
 #endif
