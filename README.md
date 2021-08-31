@@ -8,9 +8,9 @@ there are several work modes:
 3) RLE encoding by byte tripletes (for ppm pictures)
  
 there are several flags:
--haf
--rle
--ppm (-rle -ppm for .ppm files)
--un (for unzipping)
--if (for input file)
--of (for output file)
+1) -haf
+2) -rle
+3) -ppm (-rle -ppm for .ppm files)
+4) -un (for unzipping)
+5) -if (for input file)
+6) -of (for output file)
