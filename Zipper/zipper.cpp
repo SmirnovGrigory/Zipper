@@ -69,7 +69,7 @@ void HaffmanZipper::compress() {
 
 		std::vector<bool> char_code = it->second;
 
-		for (int i = 0; i <char_code.size(); i++) {
+		for (size_t i = 0; i <char_code.size(); i++) {
 			output_file << char_code[i];
 		}
 		
@@ -85,7 +85,7 @@ void HaffmanZipper::compress() {
 		char c = input_file.get();
 		std::vector<bool> char_code = vocab_table[c];
 
-		for (int i = 0; i < char_code.size(); i++) {
+		for (size_t i = 0; i < char_code.size(); i++) {
 			compress_buf = compress_buf | char_code[i] << (7 - count8);
 			count8++;
 
@@ -122,11 +122,11 @@ void printVocabTableFromZippedFile() {
 void HaffmanZipper::unzipping() {
 	std::map<char, std::vector<bool>> unzipping_vocab_table;
 	unsigned char table_len = input_file.get();
-	for (int i = 0; i < table_len; i++) {
+	for (size_t i = 0; i < table_len; i++) {
 		char c =(char)input_file.get();
 		unsigned char len = input_file.get();
 		std::vector<bool> char_code;
-		for (int j = 0; j < len; j++) {
+		for (size_t j = 0; j < len; j++) {
 			 char_code.push_back((bool)(input_file.get() - '0'));
 		}
 		unzipping_vocab_table[c] = char_code;
