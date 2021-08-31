@@ -16,6 +16,13 @@ void RleCompressor::printOccurence() {
 		std::cout << (int)c << " ";
 }
 
+void RleCompressor::writePixelsToFile() {
+	for (size_t i = 0; i < occurence.size(); i++) {
+		output_file << occurence[i];
+		for (size_t j = 0; j < 3; j++)
+			output_file << encoded_pixels[i * 3 + j];
+	}
+}
 
 void RleCompressor::compressingPicture() {
 	std::vector<unsigned char> current_pixel;
@@ -52,11 +59,8 @@ void RleCompressor::compressingPicture() {
 		}
 	}
 
-	for (size_t i = 0; i < occurence.size(); i++) {
-		output_file << occurence[i];
-		for (size_t j = 0; j < 3; j++)
-			output_file << encoded_pixels[i*3 + j];
-	}
+	writePixelsToFile();
+
 	input_file.close();
 	output_file.close();
 }
@@ -75,6 +79,13 @@ void RleCompressor::decompressingPicture() {
 		for (size_t i = 0; i < len; i++)
 			for (size_t j = 0; j < 3; j++)
 				output_file<<current_pixel[j];
+	}
+}
+
+void RleCompressor::writeBitsToFile() {
+	for (size_t i = 0; i < occurence.size(); i++) {
+		unsigned char out_char = occurence[i] | (encoded_bits[i] << 7);
+		output_file << out_char;
 	}
 }
 
@@ -112,41 +123,25 @@ void RleCompressor::compressingBits(bool utf8) {
 			}
 		}
 		//std::cout << std::endl;
-		
 	}
 
-	//printOccurence();
-	//std::cout << "\n";
-	for (size_t i = 0; i < occurence.size(); i++) {
-		//std::cout << (int)occurence[i] << " ";
-		//std::cout << encoded_bits[i] << " " ;
-		unsigned char out_char = occurence[i] | (encoded_bits[i]<<7);
-
-		/*for (int j = 0; j < 8; j++)
-			std::cout << (bool)(out_char & 1 << (7 - j));
-		std::cout << std::endl;*/
-		output_file << out_char;
-	}
-
-
+	writeBitsToFile();
 
 	input_file.close();
 	output_file.close();
 }
 
 void RleCompressor::decompressingBits(bool utf8) {
-
 	unsigned char buf = 0;
 	int count8 = 0;
 	char current_char;
+
 	while (!input_file.eof()) {
 		current_char = input_file.get();
-		//unsigned char current_char = input_file.get();
 		if (utf8 && current_char == EOF)
 			break;
 		bool current_bit = current_char & (1 << 7);
 		current_char = current_char & 127;
-
 
 		size_t i = 0;
 		while (i < current_char) {
@@ -155,16 +150,9 @@ void RleCompressor::decompressingBits(bool utf8) {
 			if (count8 == 8) {
 				count8 = 0;
 				output_file << buf;
-				/*for (int j = 0; j < 8; j++)
-					std::cout << (bool)(buf & 1 << (7 - j));*/
-				//std::cout << std::endl;
 				buf = 0;
 			}
-
 			i++;
-		}
-		//std::cout << std::endl;
-			
+		}		
 	}
-
 }

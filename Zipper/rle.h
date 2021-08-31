@@ -13,6 +13,8 @@ private:
 	std::vector<unsigned char> occurence;
 	std::ifstream input_file;
 	std::ofstream output_file;
+	void writePixelsToFile();
+	void writeBitsToFile();
 public:
 	RleCompressor(const std::string& input_file_name, const std::string& output_file_name);
 	void compressingPicture();

@@ -107,18 +107,6 @@ void HaffmanZipper::zipping(){
 	input_file.close();
 }
 
-void printVocabTableFromZippedFile() {
-	/*unsigned char table_len = zipped_file.get();
-	for (int i = 0; i < table_len; i++) {
-		std::cout << (char)zipped_file.get() << " ";
-		unsigned char len = zipped_file.get();
-		for (int j = 0; j < len; j++) {
-			std::cout << (char)zipped_file.get();
-		}
-		std::cout << std::endl;
-	}*/
-}
-
 void HaffmanZipper::unzipping() {
 	std::map<char, std::vector<bool>> unzipping_vocab_table;
 	unsigned char table_len = input_file.get();
@@ -162,7 +150,7 @@ void HaffmanZipper::unzipping() {
 	output_file.close();
 }
 
-void HaffmanZipper::printVocabStatistics() {
+void HaffmanZipper::printVocabStatistics()  {
 	std::map<char, int>::iterator it;
 	for (it = vocab_statistics.begin(); it != vocab_statistics.end(); it++)
 		std::cout << it->first << " " << it->second << std::endl;
