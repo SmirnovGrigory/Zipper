@@ -7,7 +7,7 @@ there are several work modes:
 2) RLE encoding by bites
 3) RLE encoding by byte tripletes (for ppm pictures)
  
-there are several flags:
+flags:
 1) -haf
 2) -rle
 3) -ppm (-rle -ppm for .ppm files)
